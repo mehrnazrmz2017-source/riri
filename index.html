@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>همراه روان - اپلیکیشن سلامت روان</title>
+    <style>
+        @import url('https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v30.1.0/dist/font-face.css');
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Vazir', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .logo {
+            font-size: 32px;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .description {
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e1e8ff;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            border-color: #667eea;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        button {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .mood-options {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        
+        .mood-option {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            margin: 0 5px;
+            border: 2px solid #e1e8ff;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .mood-option:hover {
+            border-color: #667eea;
+        }
+        
+        .mood-option.selected {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+        
+        .sleep-inputs {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .sleep-inputs input {
+            text-align: center;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .result-card {
+            background: #f8f9ff;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            border-right: 4px solid #667eea;
+        }
+        
+        .result-title {
+            color: #667eea;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .data-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e1e8ff;
+        }
+        
+        .data-label {
+            font-weight: bold;
+            color: #555;
+        }
+        
+        .data-value {
+            color: #333;
+        }
+        
+        .success-message {
+            background: #4ecdc4;
+            color: white;
+            padding: 12px;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #e1e8ff;
+        }
+        
+        .tab {
+            flex: 1;
+            text-align: center;
+            padding: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .tab.active {
+            border-bottom: 3px solid #667eea;
+            color: #667eea;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">🌈 همراه روان</div>
+            <h1>اپلیکیشن مراقبت سلامت روان</h1>
+            <p class="description">حالت امروزت چطوره؟ اطلاعاتت رو ثبت کن تا بتونی روندت رو ببینی</p>
+        </div>
+        
+        <div class="tabs">
+            <div class="tab active" onclick="showTab('entry')">📝 ثبت اطلاعات</div>
+            <div class="tab" onclick="showTab('history')">📊 تاریخچه</div>
+        </div>
+        
+        <div id="entry-tab">
+            <div class="form-group">
+                <label>اسمت چیه؟</label>
+                <input type="text" id="user-name" placeholder="نامتو اینجا بنویس">
+            </div>
+            
+            <div class="form-group">
+                <label>امروز حالت چطوره؟</label>
+                <div class="mood-options">
+                    <div class="mood-option" data-value="1" onclick="selectMood(this)">😔 بد</div>
+                    <div class="mood-option" data-value="2" onclick="selectMood(this)">😐 متوسط</div>
+                    <div class="mood-option" data-value="3" onclick="selectMood(this)">🙂 خوب</div>
+                    <div class="mood-option" data-value="4" onclick="selectMood(this)">😊 عالی</div>
+                    <div class="mood-option" data-value="5" onclick="selectMood(this)">🤩 فوق العاده</div>
+                </div>
+                <input type="hidden" id="selected-mood">
+            </div>
+            
+            <div class="form-group">
+                <label>دیشب چند ساعت خوابیدی؟</label>
+                <div class="sleep-inputs">
+                    <input type="number" id="sleep-hours" placeholder="ساعت" min="0" max="24">
+                    <span style="line-height: 45px;">ساعت و</span>
+                    <input type="number" id="sleep-minutes" placeholder="دقیقه" min="0" max="59">
+                    <span style="line-height: 45px;">دقیقه</span>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>دارویی مصرف کردی؟</label>
+                <select id="medication">
+                    <option value="no">نه، مصرف نکردم</option>
+                    <option value="yes">بله، مصرف کردم</option>
+                    <option value="partial">بعضی هاش رو مصرف کردم</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>یادداشت روزانه (اختیاری)</label>
+                <textarea id="daily-note" rows="3" placeholder="امروز چه حسی داری؟ چیزی که میخوای بگی رو اینجا بنویس..."></textarea>
+            </div>
+            
+            <button onclick="saveEntry()">💾 ذخیره اطلاعات امروز</button>
+            
+            <div id="success-message" class="success-message hidden">
+                اطلاعاتت با موفقیت ثبت شد! میتونی توی تب تاریخچه ببینی.
+            </div>
+        </div>
+        
+        <div id="history-tab" class="hidden">
+            <h2 class="result-title">تاریخچه اطلاعاتت</h2>
+            <div id="history-container">
+                <!-- اطلاعات تاریخچه اینجا نمایش داده میشه -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // داده‌های کاربر
+        let userData = JSON.parse(localStorage.getItem('hamrahRavan_data')) || [];
+        let currentMood = null;
+        
+        // نمایش تب فعال
+        function showTab(tabName) {
+            document.getElementById('entry-tab').classList.add('hidden');
+            document.getElementById('history-tab').classList.add('hidden');
+            document.getElementById(tabName + '-tab').classList.remove('hidden');
+            
+            // به‌روزرسانی تب‌های فعال
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // اگر تب تاریخچه است، اطلاعات را بارگذاری کن
+            if (tabName === 'history') {
+                loadHistory();
+            }
+        }
+        
+        // انتخاب حالت روحی
+        function selectMood(element) {
+            // حذف انتخاب قبلی
+            document.querySelectorAll('.mood-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            // انتخاب جدید
+            element.classList.add('selected');
+            currentMood = element.getAttribute('data-value');
+            document.getElementById('selected-mood').value = currentMood;
+        }
+        
+        // ذخیره اطلاعات
+        function saveEntry() {
+            const name = document.getElementById('user-name').value.trim();
+            const mood = currentMood;
+            const sleepHours = document.getElementById('sleep-hours').value;
+            const sleepMinutes = document.getElementById('sleep-minutes').value;
+            const medication = document.getElementById('medication').value;
+            const note = document.getElementById('daily-note').value.trim();
+            
+            // اعتبارسنجی
+            if (!name) {
+                alert('لطفاً اسمت رو بنویس!');
+                return;
+            }
+            
+            if (!mood) {
+                alert('لطفاً حالت امروزت رو انتخاب کن!');
+                return;
+            }
+            
+            if (!sleepHours && !sleepMinutes) {
+                alert('لطفاً ساعت خوابت رو وارد کن!');
+                return;
+            }
+            
+            // ایجاد ورودی جدید
+            const entry = {
+                id: Date.now(),
+                name: name,
+                date: new Date().toLocaleDateString('fa-IR'),
+                mood: mood,
+                sleep: {
+                    hours: sleepHours || 0,
+                    minutes: sleepMinutes || 0
+                },
+                medication: medication,
+                note: note,
+                timestamp: new Date().toISOString()
+            };
+            
+            // ذخیره در آرایه
+            userData.push(entry);
+            
+            // ذخیره در localStorage
+            localStorage.setItem('hamrahRavan_data', JSON.stringify(userData));
+            
+            // نمایش پیام موفقیت
+            document.getElementById('success-message').classList.remove('hidden');
+            
+            // پاک کردن فرم
+            document.getElementById('user-name').value = '';
+            document.querySelectorAll('.mood-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            document.getElementById('sleep-hours').value = '';
+            document.getElementById('sleep-minutes').value = '';
+            document.getElementById('medication').value = 'no';
+            document.getElementById('daily-note').value = '';
+            currentMood = null;
+            
+            // اسکرول به بالا
+            window.scrollTo(0, 0);
+        }
+        
+        // بارگذاری تاریخچه
+        function loadHistory() {
+            const container = document.getElementById('history-container');
+            container.innerHTML = '';
+            
+            if (userData.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #666;">هنوز اطلاعاتی ثبت نکردی!</p>';
+                return;
+            }
+            
+            // مرتب‌سازی بر اساس تاریخ (جدیدترین اول)
+            const sortedData = [...userData].sort((a, b) => 
+                new Date(b.timestamp) - new Date(a.timestamp)
+            );
+            
+            sortedData.forEach(entry => {
+                const card = document.createElement('div');
+                card.className = 'result-card';
+                
+                const moodText = getMoodText(entry.mood);
+                const sleepText = `${entry.sleep.hours || 0} ساعت و ${entry.sleep.minutes || 0} دقیقه`;
+                const medText = getMedicationText(entry.medication);
+                
+                card.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                        <strong>${entry.name}</strong>
+                        <span style="color: #667eea;">${entry.date}</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="data-label">حالت روحی:</span>
+                        <span class="data-value">${moodText}</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="data-label">خواب شب:</span>
+                        <span class="data-value">${sleepText}</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="data-label">دارو:</span>
+                        <span class="data-value">${medText}</span>
+                    </div>
+                    ${entry.note ? `
+                    <div class="data-item">
+                        <span class="data-label">یادداشت:</span>
+                        <span class="data-value">${entry.note}</span>
+                    </div>
+                    ` : ''}
+                    <button onclick="deleteEntry(${entry.id})" style="background: #ff6b6b; margin-top: 10px;">🗑️ حذف</button>
+                `;
+                
+                container.appendChild(card);
+            });
+        }
+        
+        // حذف ورودی
+        function deleteEntry(id) {
+            if (confirm('مطمئنی میخوای این اطلاعات رو حذف کنی؟')) {
+                userData = userData.filter(entry => entry.id !== id);
+                localStorage.setItem('hamrahRavan_data', JSON.stringify(userData));
+                loadHistory();
+            }
+        }
+        
+        // توابع کمکی
+        function getMoodText(moodValue) {
+            const moods = {
+                '1': '😔 بد',
+                '2': '😐 متوسط', 
+                '3': '🙂 خوب',
+                '4': '😊 عالی',
+                '5': '🤩 فوق العاده'
+            };
+            return moods[moodValue] || 'ثبت نشده';
+        }
+        
+        function getMedicationText(medValue) {
+            const meds = {
+                'no': '❌ مصرف نکردم',
+                'yes': '✅ مصرف کردم',
+                'partial': '⚠️ بعضی هاش رو مصرف کردم'
+            };
+            return meds[medValue] || 'ثبت نشده';
+        }
+        
+        // بارگذاری اولیه
+        document.addEventListener('DOMContentLoaded', function() {
+            userData = JSON.parse(localStorage.getItem('hamrahRavan_data')) || [];
+        });
+    </script>
+</body>
+</html>
